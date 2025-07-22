@@ -1,10 +1,15 @@
-import { User } from '../../../domain/entities/user.entity';
-import { UserRepository } from '../../../domain/repositories/user.repository';
+import { Inject, Injectable } from '@nestjs/common';
+import { UserRepository } from 'src/domain/repositories/user.repository';
+import { User } from 'src/domain/entities/user.entity';
 import { CreateUserDto } from 'src/application/dtos/user/create-user.dto';
 import { randomUUID } from 'crypto';
 
+@Injectable()
 export class CreateUserUseCase {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    @Inject('UserRepository')
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async execute(input: CreateUserDto): Promise<any> {
     const { name, email, password, role } = input;
@@ -14,13 +19,7 @@ export class CreateUserUseCase {
       throw new Error('Já existe um usuário com esse email.');
     }
 
-    const user = new User(
-      randomUUID(),
-      name,
-      email,
-      password, // futuramente hash aqui
-      role
-    );
+    const user = new User(randomUUID(), name, email, password, role);
 
     await this.userRepository.create(user);
 
