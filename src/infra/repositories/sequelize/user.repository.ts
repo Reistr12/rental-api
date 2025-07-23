@@ -25,10 +25,11 @@ export class UserRepository implements IUserRepository{
 }   
 
   async findByEmail(email: string): Promise<any | null> {
-    const user = await this.userModel.findOne({ where: { email } });
-    if (!user) return null;
-    const { password, ...userWithoutPassword } = user.get({ plain: true });
-    return userWithoutPassword;
+   const user = await this.userModel.findOne({ where: { email } });
+   if (!user) return null;
+
+  const { password, ...userWithoutPassword } = user.get({ plain: true });
+  return userWithoutPassword; 
   }
 
   async update(user: User): Promise<void> {

@@ -18,7 +18,6 @@ export class CreateUserUseCase {
     if (userAlreadyExists) {
       throw new Error('Já existe um usuário com esse email.');
     }
-
     const user = new UserEntity(randomUUID(), name, email, password, role);
 
     await this.userRepository.create(user);

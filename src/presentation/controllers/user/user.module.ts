@@ -8,10 +8,12 @@ import { UserRepository } from 'src/infra/repositories/sequelize/user.repository
 import { User } from 'src/infra/database/models/user.model';
 import { ShowUserByEmailController } from './show-user-by-email.controller';
 import { ShowUserByEmailUseCase } from 'src/application/use-cases/user/show-user-by-email.usecase';
+import { UpdatePartialUserController } from './update-partial-user.controller';
+import { UpdateUserController } from './update-user.controller';
 
 @Module({
   imports: [SequelizeModule.forFeature([User])],
-  controllers: [CreateUserController, ShowUserByIdController, ShowUserByEmailController],
+  controllers: [CreateUserController, ShowUserByIdController, ShowUserByEmailController, UpdateUserController, UpdatePartialUserController],
   providers: [
     CreateUserUseCase, ShowUserByIdUseCase, ShowUserByEmailUseCase,
     {
