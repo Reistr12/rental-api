@@ -1,18 +1,22 @@
 import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { CreateUserController } from './create-user.controller';
 import { CreateUserUseCase } from 'src/application/use-cases/user/create-user.use-case';
-import { UserRepository } from 'src/domain/repositories/user.repository';
-import { InMemoryUserRepository } from 'src/domain/repositories/in-memory-user.repository';
 import { ShowUserByIdController } from './show-user-by-id.controller';
 import { ShowUserByIdUseCase } from 'src/application/use-cases/user/show-user-by-id.usecase';
+import { UserRepository } from 'src/infra/repositories/sequelize/user.repository';
+import { User } from 'src/infra/database/models/user.model';
+import { ShowUserByEmailController } from './show-user-by-email.controller';
+import { ShowUserByEmailUseCase } from 'src/application/use-cases/user/show-user-by-email.usecase';
 
 @Module({
-  controllers: [CreateUserController, ShowUserByIdController],
+  imports: [SequelizeModule.forFeature([User])],
+  controllers: [CreateUserController, ShowUserByIdController, ShowUserByEmailController],
   providers: [
-    CreateUserUseCase, ShowUserByIdUseCase,
+    CreateUserUseCase, ShowUserByIdUseCase, ShowUserByEmailUseCase,
     {
-      provide: 'UserRepository',
-      useClass: InMemoryUserRepository, // por enquanto uma simulação (vamos criar agora)
+      provide: 'IUserRepository',
+      useClass: UserRepository, // Use Sequelize UserRepository
     },
   ],
 })

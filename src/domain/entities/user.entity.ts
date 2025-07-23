@@ -1,6 +1,6 @@
 export type UserRole = 'LOCADOR' | 'INQUILINO';
 
-export class User {
+export class UserEntity {
   constructor(
     public readonly id: string,
     public name: string,

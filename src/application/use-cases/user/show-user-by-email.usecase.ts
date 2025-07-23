@@ -3,14 +3,14 @@ import { UserEntity } from "src/domain/entities/user.entity";
 import { IUserRepository } from "src/domain/repositories/iuser.repository";
 
 @Injectable()
-export class ShowUserByIdUseCase {
+export class ShowUserByEmailUseCase {   
   constructor(
     @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(userId: string): Promise<UserEntity> {
-    const user = await this.userRepository.findById(userId);
+  async execute(email: string): Promise<UserEntity> {
+    const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new Error('Usuário não encontrado.');
     }
@@ -24,4 +24,4 @@ export class ShowUserByIdUseCase {
       user.createdAt,
     );
   }
-}
+}   
