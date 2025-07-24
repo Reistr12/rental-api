@@ -1,20 +1,23 @@
-export class Property {
+export class PropertyEntity {
   constructor(
     public readonly id: string,
-    public ownerId: string, // refere-se ao User (locador)
     public title: string,
     public description: string,
     public address: string,
-    public pricePerMonth: number,
-    public available: boolean = true,
-    public createdAt: Date = new Date()
-  ) {}
+    public price: number,
+    public ownerId: string,
+    public readonly createdAt: Date = new Date(),
+  ) {
+    if (!title || title.trim().length === 0) {
+      throw new Error('Título é obrigatório.');
+    }
 
-  markAsUnavailable() {
-    this.available = false;
-  }
+    if (price <= 0) {
+      throw new Error('O preço do imóvel deve ser maior que zero.');
+    }
 
-  markAsAvailable() {
-    this.available = true;
+    if (!ownerId || ownerId.trim().length === 0) {
+      throw new Error('Proprietário é obrigatório.');
+    }
   }
 }

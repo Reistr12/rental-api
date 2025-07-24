@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './infra/database/models/user.model';
 import { UserModule } from './presentation/controllers/user/user.module';
+import { PropertyModule } from './presentation/controllers/property/property.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './presentation/controllers/user/user.module';
       models: [User], // Lista de models
     }),
     UserModule,
+    PropertyModule,
   ],
 })
 export class AppModule {}
