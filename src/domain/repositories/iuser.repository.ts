@@ -5,7 +5,8 @@ export interface IUserRepository {
   create(user: UserEntity): Promise<User>;
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
-  update(user: User): Promise<void>;
+  update(user: UserEntity): Promise<void>;
+  updatePartial(data: Partial<UserEntity>): Promise<User | null>;
   delete(id: string): Promise<void>;
 }
     

@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/sequelize';
+import { error } from "console";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { IUserRepository } from "src/domain/repositories/iuser.repository";
 import { User } from 'src/infra/database/models/user.model';
@@ -28,25 +29,64 @@ export class UserRepository implements IUserRepository{
    const user = await this.userModel.findOne({ where: { email } });
    if (!user) return null;
 
+  //exclui a senha do objeto retornado
   const { password, ...userWithoutPassword } = user.get({ plain: true });
   return userWithoutPassword; 
   }
 
-  async update(user: User): Promise<void> {
+  async update(user: UserEntity): Promise<any> {
     const existingUser = await this.userModel.findByPk(user.id);
     if (existingUser) {
-      await existingUser.update(user);
+      await existingUser.update({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        role: user.role,
+      });
     } else {
       throw new Error('User not found');
+    }
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
     }
   }
 
-  async delete(id: string): Promise<void> {
-    const user = await this.userModel.findByPk(id);
-    if (user) {
-      await user.destroy();
-    } else {
+  async updatePartial(data: Partial<UserEntity>): Promise<any> {
+    const user = await this.userModel.findByPk(data.id);
+
+    if (!user) {
       throw new Error('User not found');
     }
+
+    await user.update(data);
+
+    //Linhas adicionadas para retornar o atualizar o user depois da mudança
+    //Isso é opcional, dependendo de como você deseja manipular o retorno
+    const updatedUser = await this.userModel.findByPk(data.id);
+    if (!updatedUser) {
+      throw new Error('Updated user not found');
+    }
+    const plainUser = updatedUser.get({ plain: true });
+
+    return {
+      id: plainUser.id,
+      name: plainUser.name,
+      email: plainUser.email,
+      role: plainUser.role,
+      createdAt: plainUser.createdAt,
+    };
+  }
+
+  async delete(email: string): Promise<any> {
+    const deleted = await User.destroy({ where: { email } });
+    if (deleted === 0) {
+      
+       throw new Error('User not found');
+    }
+    return { message: 'User deleted successfully' };
   }
 }
