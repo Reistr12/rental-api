@@ -7,7 +7,7 @@ import { CreatePropertyController } from "./create-property.controller";
     controllers: [CreatePropertyController],
     providers: [CreatePropertyUseCase,{
         provide: 'IPropertyRepository',
-        useClass: PropertyRepository, // Use Sequelize PropertyRepository
+        useClass: PropertyRepository, 
     }],
     exports: []
 })

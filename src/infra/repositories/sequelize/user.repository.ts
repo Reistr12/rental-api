@@ -34,6 +34,17 @@ export class UserRepository implements IUserRepository{
   return userWithoutPassword; 
   }
 
+  // Método para encontrar usuário por email, incluindo a senha
+  // Isso é útil para autenticação, mas deve ser usado com cuidado
+  // pois expõe a senha do usuário.
+  async findByEmailWithPassword(email: string): Promise<any | null> {
+    const user = await this.userModel.findOne({ where: { email } });
+    if (!user) return null;
+    // retorna com a senha (não remove)
+    return user.get({ plain: true });
+  }
+
+
   async update(user: UserEntity): Promise<any> {
     const existingUser = await this.userModel.findByPk(user.id);
     if (existingUser) {

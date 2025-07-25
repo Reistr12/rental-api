@@ -3,6 +3,7 @@ import { IUserRepository } from 'src/domain/repositories/iuser.repository';
 import { UserEntity } from 'src/domain/entities/user.entity';
 import { CreateUserDto } from 'src/application/dtos/user/create-user.dto';
 import { randomUUID } from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -18,7 +19,9 @@ export class CreateUserUseCase {
     if (userAlreadyExists) {
       throw new Error('Já existe um usuário com esse email.');
     }
-    const user = new UserEntity(randomUUID(), name, email, password, role);
+
+    const hashedPassword = await bcrypt.hash(password, 10);  
+    const user = new UserEntity(randomUUID(), name, email, hashedPassword, role);
 
     await this.userRepository.create(user);
 

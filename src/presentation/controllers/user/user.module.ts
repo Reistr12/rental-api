@@ -19,11 +19,18 @@ import { DeleteUserUseCase } from 'src/application/use-cases/user/delete-user.us
   imports: [SequelizeModule.forFeature([User])],
   controllers: [CreateUserController, ShowUserByIdController, ShowUserByEmailController, UpdateUserController, UpdatePartialUserController, DeleteUserController ],
   providers: [
-    CreateUserUseCase, ShowUserByIdUseCase, ShowUserByEmailUseCase, UpdateUserUseCase , UpdatePartialUserUseCase, DeleteUserUseCase,
+    CreateUserUseCase, 
+    ShowUserByIdUseCase, 
+    ShowUserByEmailUseCase, 
+    UpdateUserUseCase, 
+    UpdatePartialUserUseCase, 
+    DeleteUserUseCase, 
+    UserRepository,
     {
       provide: 'IUserRepository',
-      useClass: UserRepository, // Use Sequelize UserRepository
+      useClass: UserRepository,
     },
   ],
+  exports: ['IUserRepository'], // Exportando o repositório para ser usado em outros módulos
 })
 export class UserModule {}

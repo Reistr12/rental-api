@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { CreatePropertyDto } from "src/application/dtos/property/create-property.dto";
 import { CreatePropertyUseCase } from "src/application/use-cases/property/create-property.usecase";
+
 
 @Controller('properties')
 export class CreatePropertyController {

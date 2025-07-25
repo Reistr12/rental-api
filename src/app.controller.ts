@@ -1,12 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Public } from './auth/decorators/public.decorator';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  @Public()
+  @Get('testpublic')
+  getPublic() {
+    return { message: 'rota pública funcionando' };
+  }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('testprivate')
+  getPrivate() {
+    return { message: 'rota protegida funcionando' };
   }
 }
