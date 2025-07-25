@@ -13,11 +13,15 @@ export class UpdateUserUseCase {
     private readonly IuserRepository: IUserRepository,
   ) {}
 
-   async execute(input: any): Promise<void> {
-    const user = await this.IuserRepository.findByEmail(input.email);
+   async execute(input, userInfo, id): Promise<void> {
+    const user = await this.IuserRepository.findById(id);
 
     if (!user) {
-      throw new Error('Usuário não encontrado.');
+      throw new Error('User not found.');
+    }
+
+    if(userInfo.sub !== user.id){
+      throw new Error('you not authorization for update thi user');
     }
 
     const updatedUser = new UserEntity(
@@ -27,6 +31,6 @@ export class UpdateUserUseCase {
       input.password ?? user.password,
       input.role ?? user.role
     );
-    await this.IuserRepository.update(updatedUser);
+    return await this.IuserRepository.update(updatedUser);
   }
 }

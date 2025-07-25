@@ -11,8 +11,6 @@ export class ShowPropertyByIdController {
     @UseGuards(AuthGuard)
     @Get(':id')
     async showPropertyById(@Param('id', ParseUUIDPipe) id: string): Promise<any> {
-        console.log("===========================================================================");
-        console.log(id)
         return await this.showPropertyByIdUseCase.execute(id);
     }
 }

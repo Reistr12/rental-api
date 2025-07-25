@@ -10,13 +10,16 @@ export class UpdatePartialUserUseCase {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async execute(input: any): Promise<any> {
-    const user = await this.userRepository.findByEmail(input.email);
+  async execute(input: any, userInfo: any, id): Promise<any> {
+    const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new Error('Usuário não encontrado.');
+      throw new Error('User Not Found');
     }
-
+    
+    if(user.id !== userInfo.sub){
+      throw new Error('You not authorization for update this user');
+    }
     const updatedUser = new UserEntity(
       user.id,
       input.name ?? user.name,

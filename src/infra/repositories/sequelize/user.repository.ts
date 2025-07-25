@@ -29,7 +29,6 @@ export class UserRepository implements IUserRepository{
    const user = await this.userModel.findOne({ where: { email } });
    if (!user) return null;
 
-  //exclui a senha do objeto retornado
   const { password, ...userWithoutPassword } = user.get({ plain: true });
   return userWithoutPassword; 
   }
@@ -57,13 +56,14 @@ export class UserRepository implements IUserRepository{
     } else {
       throw new Error('User not found');
     }
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      createdAt: user.createdAt,
-    }
+    return new UserEntity(
+      user.id,
+      user.name,
+      user.email,
+      user.password,
+      user.role,
+      user.createdAt ?? new Date(),
+    )
   }
 
   async updatePartial(data: Partial<UserEntity>): Promise<any> {

@@ -7,12 +7,17 @@ export class DeleteUserUseCase {
     @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,) {}
 
-    async execute(email): Promise<any> {
+    async execute(email: string, userInfo: any): Promise<any> {
      const userAlreadyExists = await this.userRepository.findByEmail(email);
+
      if (!userAlreadyExists) {
        throw new Error('Não existe um usuário com esse email.');
      }
-      return await this.userRepository.delete(email);
-      
-    }
+
+      if(userAlreadyExists.id == userInfo.sub){
+        return await this.userRepository.delete(email);
+      } else {
+       throw new Error('You do not have permission to delete this user')
+      }      
+  }
 }   

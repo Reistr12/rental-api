@@ -15,11 +15,12 @@ export class PropertyRepository implements IPropertyRepository {
     return await this.propertyModel.create(property as any);
   }
 
-  async findById(id: string): Promise<PropertyEntity | any> {
+  async findById(id: string): Promise<any> {
     const property = await this.propertyModel.findByPk(id);
     if (!property) {
-      throw new Error('Property not found');
+      return null; 
     }
+
 
   return new PropertyEntity(
     property.id,
@@ -33,13 +34,22 @@ export class PropertyRepository implements IPropertyRepository {
 
   }
 
-  async findAll(): Promise<PropertyEntity[] | any> {
-    const properties = await this.propertyModel.findAll();
-    if (!properties || properties.length === 0) { 
-     throw new Error('No properties found');
-    }
-    return properties; 
+  async findAll(): Promise<PropertyEntity[]> {
+    const properties = await PropertyModel.findAll();
+    return properties.map(
+      (p) =>
+        new PropertyEntity(
+          p.id,
+          p.title,
+          p.description,
+          p.address,
+          p.price,
+          p.ownerId,
+          p.createdAt,
+        ),
+    );
   }
+
 
   async findByOwnerId(ownerId: string): Promise<PropertyEntity[]> {
     const properties = await this.propertyModel.findAll({ where: { ownerId } });
@@ -48,12 +58,36 @@ export class PropertyRepository implements IPropertyRepository {
     }
     return properties; 
   }
-
-  async update(property: PropertyEntity): Promise<void> {
-    // Implementation for updating a property
+  
+  async update(property: PropertyEntity): Promise<any> {
+    const existingProperty = await PropertyModel.findByPk(property.id);
+    console.log(existingProperty)
+    if (existingProperty) {
+      await existingProperty.update({
+        title: property.title,
+        description: property.description,
+        address: property.address,
+        price: property.price,
+      });
+    } else {
+      throw new Error('Property not found');
+    }
+    return new PropertyEntity(
+      property.id ?? existingProperty.id,
+      property.title,
+      property.description,
+      existingProperty.address,
+      property.price,
+      existingProperty.ownerId,
+    )
   }
 
-  async delete(id: string): Promise<void> {
-    // Implementation for deleting a property by ID
-  }
+  async delete(id: string): Promise<any> {
+      const deleted = await PropertyModel.destroy({ where: { id } });
+      if (deleted === 0) {
+        
+         throw new Error('User not found');
+      }
+      return { message: 'User deleted successfully' };
+    }
 }

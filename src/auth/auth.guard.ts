@@ -18,11 +18,6 @@ export class AuthGuard implements CanActivate {
     if (!authorization) throw new UnauthorizedException('Token is required');
 
     try {
-        console.log("==============================================================")
-        console.log('TOKEN:', authorization);
-        console.log('SECRET:', process.env.JWT_SECRET || 'default',
-);
-        console.log("==============================================================")
       const payload = this.jwtService.verify(authorization, {
        secret: process.env.JWT_SECRET || 'default',
 
