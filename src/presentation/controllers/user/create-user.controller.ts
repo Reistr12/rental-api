@@ -1,15 +1,14 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from 'src/application/dtos/user/create-user.dto';
 import { CreateUserUseCase } from 'src/application/use-cases/user/create-user.use-case';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { UserEntity } from 'src/domain/entities/user.entity';
 
 @Controller('users')
 export class CreateUserController {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
-  @Public()
-  @Post()
+
+  @Post('create')
   async createUser(@Body() data: CreateUserDto): Promise<UserEntity> {
     try {
       const user = await this.createUserUseCase.execute(data);

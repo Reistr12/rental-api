@@ -14,14 +14,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<User> {
+  async validateUser(email: string, password: string): Promise<{access_token: string}> {
   const user = await this.userRepository.findByEmailWithPassword(email);
   if (!user) throw new UnauthorizedException('Email ou senha inválidos');
 
   const passwordValid = await bcrypt.compare(password, user.password);
   if (!passwordValid) throw new UnauthorizedException('Email ou senha inválidos');
 
-  return user;
+  return this.login(user);
 }
 
 
@@ -29,7 +29,7 @@ export class AuthService {
     const payload = {
       sub: user.id,
       email: user.email,
-      role: user.role, // se você tiver isso
+      role: user.role, 
     };
 
     return {

@@ -3,18 +3,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './infra/database/models/user.model';
 import { UserModule } from './presentation/controllers/user/user.module';
 import { PropertyModule } from './presentation/controllers/property/property.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guards';
+import { AuthGuard } from './auth/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
-   ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    AuthModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: 'localhost',
@@ -29,12 +26,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guards';
     UserModule,
     AuthModule
   ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard, // <-- Agora Nest vai injetar o Reflector corretamente
-    },
-  ],
+  providers: [],
   controllers: [AppController]
 })
 export class AppModule {}
