@@ -4,10 +4,7 @@ import { User } from './infra/database/models/user.model';
 import { UserModule } from './presentation/controllers/user/user.module';
 import { PropertyModule } from './presentation/controllers/property/property.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
-import { AuthGuard } from './auth/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -24,7 +21,8 @@ import { APP_GUARD } from '@nestjs/core';
       models: [User], // Lista de models
     }),
     UserModule,
-    AuthModule
+    AuthModule,
+    PropertyModule
   ],
   providers: [],
   controllers: [AppController]

@@ -21,15 +21,16 @@ export class PropertyRepository implements IPropertyRepository {
       throw new Error('Property not found');
     }
 
-    return new PropertyEntity(
-      property.id,
-      property.title,
-      property.description,
-      property.address,
-      property.price,
-      property.ownerId,
-      property.createdAt || NOW
-    );
+  return new PropertyEntity(
+    property.id,
+    property.title,
+    property.description,
+    property.address,
+    property.price,
+    property.ownerId,
+    property.createdAt ?? new Date()
+  );
+
   }
 
   async findAll(): Promise<PropertyEntity[] | any> {

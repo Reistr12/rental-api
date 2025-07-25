@@ -15,19 +15,19 @@ export class PropertyModel extends Model<PropertyModel> {
   declare id: string;
 
   @Column
-  title: string;
+  declare title: string;
 
   @Column(DataType.TEXT)
-  description: string;
+  declare description: string;
 
   @Column
-  address: string;
+  declare address: string;
 
   @Column(DataType.FLOAT)
-  price: number;
+  declare price: number;
 
   @Column({ type: DataType.UUID })
-  ownerId: string;
+  declare ownerId: string;
 
   @CreatedAt
   @Column

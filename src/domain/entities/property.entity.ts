@@ -16,7 +16,7 @@ export class PropertyEntity {
       throw new Error('O preço do imóvel deve ser maior que zero.');
     }
 
-    if (!ownerId || ownerId.trim().length === 0) {
+    if (!ownerId) {
       throw new Error('Proprietário é obrigatório.');
     }
   }
