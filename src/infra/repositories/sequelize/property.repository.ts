@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { NOW } from "sequelize";
 import { PropertyEntity } from "src/domain/entities/property.entity";
@@ -15,10 +15,10 @@ export class PropertyRepository implements IPropertyRepository {
     return await this.propertyModel.create(property as any);
   }
 
-  async findById(id: string): Promise<any> {
+  async findById(id: string): Promise<PropertyEntity> {
     const property = await this.propertyModel.findByPk(id);
     if (!property) {
-      return null; 
+      throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
     }
 
 
@@ -54,14 +54,14 @@ export class PropertyRepository implements IPropertyRepository {
   async findByOwnerId(ownerId: string): Promise<PropertyEntity[]> {
     const properties = await this.propertyModel.findAll({ where: { ownerId } });
     if (!properties || properties.length === 0) {
-      throw new Error('No properties found for this owner');
+      throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
     }
     return properties; 
   }
   
   async update(property: PropertyEntity): Promise<any> {
     const existingProperty = await PropertyModel.findByPk(property.id);
-    console.log(existingProperty)
+
     if (existingProperty) {
       await existingProperty.update({
         title: property.title,
@@ -70,13 +70,13 @@ export class PropertyRepository implements IPropertyRepository {
         price: property.price,
       });
     } else {
-      throw new Error('Property not found');
+      throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
     }
     return new PropertyEntity(
       property.id ?? existingProperty.id,
       property.title,
       property.description,
-      existingProperty.address,
+      property.address,
       property.price,
       existingProperty.ownerId,
     )
@@ -86,7 +86,7 @@ export class PropertyRepository implements IPropertyRepository {
       const deleted = await PropertyModel.destroy({ where: { id } });
       if (deleted === 0) {
         
-         throw new Error('User not found');
+         throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
       }
       return { message: 'User deleted successfully' };
     }

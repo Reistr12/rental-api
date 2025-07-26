@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/sequelize';
 import { error } from "console";
 import { UserEntity } from "src/domain/entities/user.entity";
@@ -18,9 +18,9 @@ export class UserRepository implements IUserRepository{
     return created;
   }
 
-  async findById(id: string): Promise<any | null> {
+  async findById(id: string): Promise<any | any> {
     const user = await this.userModel.findOne({ where: { id } });
-    if (!user) return null;
+    if (!user) throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     const { password, ...userWithoutPassword } = user.get({ plain: true });
     return userWithoutPassword;
 }   
@@ -54,7 +54,7 @@ export class UserRepository implements IUserRepository{
         role: user.role,
       });
     } else {
-      throw new Error('User not found');
+      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     }
     return new UserEntity(
       user.id,
@@ -70,7 +70,7 @@ export class UserRepository implements IUserRepository{
     const user = await this.userModel.findByPk(data.id);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     }
 
     await user.update(data);
@@ -79,7 +79,7 @@ export class UserRepository implements IUserRepository{
     //Isso é opcional, dependendo de como você deseja manipular o retorno
     const updatedUser = await this.userModel.findByPk(data.id);
     if (!updatedUser) {
-      throw new Error('Updated user not found');
+      throw new HttpException('Error.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     const plainUser = updatedUser.get({ plain: true });
 
@@ -94,9 +94,8 @@ export class UserRepository implements IUserRepository{
 
   async delete(email: string): Promise<any> {
     const deleted = await User.destroy({ where: { email } });
-    if (deleted === 0) {
-      
-       throw new Error('User not found');
+    if (deleted === 0) { 
+       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
     }
     return { message: 'User deleted successfully' };
   }

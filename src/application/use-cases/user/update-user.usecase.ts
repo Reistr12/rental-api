@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { UpdatePartialDto } from "src/application/dtos/user/update-partial.dto";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { IUserRepository } from "src/domain/repositories/iuser.repository";
@@ -21,7 +21,7 @@ export class UpdateUserUseCase {
     }
 
     if(userInfo.sub !== user.id){
-      throw new Error('you not authorization for update thi user');
+      throw new HttpException('You not authorization for update this user', HttpStatus.UNAUTHORIZED)
     }
 
     const updatedUser = new UserEntity(

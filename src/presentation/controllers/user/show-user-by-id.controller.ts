@@ -10,11 +10,7 @@ export class ShowUserByIdController {
   @UseGuards(AuthGuard)
   @Get(':id')
   async showUserById(@Param('id') id: string): Promise<UserEntity> {
-    try {
       const user = await this.showUserByIdUseCase.execute(id);
-      return user;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
+      return user
   }
 }

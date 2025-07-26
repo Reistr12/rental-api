@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { UpdatePartialDto } from "src/application/dtos/user/update-partial.dto";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { UserRepository } from "src/infra/repositories/sequelize/user.repository";
@@ -10,15 +10,15 @@ export class UpdatePartialUserUseCase {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async execute(input: any, userInfo: any, id): Promise<any> {
+  async execute(input: any, userInfo: any, id: string): Promise<any> {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new Error('User Not Found');
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
     }
     
     if(user.id !== userInfo.sub){
-      throw new Error('You not authorization for update this user');
+      throw new HttpException('You not authorization for update this user', HttpStatus.UNAUTHORIZED)
     }
     const updatedUser = new UserEntity(
       user.id,

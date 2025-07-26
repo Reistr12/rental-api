@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { promises } from "dns";
 import { IPropertyRepository } from "src/domain/repositories/ipropety.repository";
 
@@ -10,11 +10,11 @@ export class DeletePropertyUseCase {
     const property = await this.PropetyRepository.findById(propertyId);
   
     if (!property) {
-      throw new Error('Property not found');
+      throw new HttpException('Property not found', HttpStatus.NOT_FOUND)
     }  
 
     if (property.ownerId !== ownerId) {
-      throw new Error('You do not have permission to delete this property');
+      throw new HttpException('You not have permission to delete this property.', HttpStatus.UNAUTHORIZED);
     }
 
     return await this.PropetyRepository.delete(propertyId);

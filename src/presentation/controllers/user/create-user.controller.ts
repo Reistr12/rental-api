@@ -11,11 +11,7 @@ export class CreateUserController {
   @UseGuards(AuthGuard)
   @Post('create')
   async createUser(@Body() data: CreateUserDto): Promise<UserEntity> {
-    try {
       const user = await this.createUserUseCase.execute(data);
       return user;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
   }
 }

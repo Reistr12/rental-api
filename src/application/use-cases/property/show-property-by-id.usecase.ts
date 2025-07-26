@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { IPropertyRepository } from "src/domain/repositories/ipropety.repository";
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ShowPropertyByIdUseCase {
     async execute(id: string): Promise<any> {
         const property = await this.propertyRepository.findById(id);
         if (!property) {
-            throw new Error('Property not found');
+            throw new HttpException('Property not found', HttpStatus.NOT_FOUND)
         }
         return property;
     }

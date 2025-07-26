@@ -10,11 +10,7 @@ export class ShowUserByEmailController {
   @UseGuards(AuthGuard)
   @Post("email")
   async showUserByEmail(@Body() Body: {email: string}): Promise<UserEntity> {
-    try {
       const user = await this.showUserByEmailUseCase.execute(Body.email);
       return user;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
-    }
   }
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { error } from "node:console";
 import { randomUUID } from "node:crypto";
 import { updatePropertyDto } from "src/application/dtos/property/update-property.dto";
@@ -13,9 +13,12 @@ export class UpdatePropertyUseCase {
   ) {}
   async execute(data: updatePropertyDto, ownerId: string, id: string) {
     if(data.title == undefined || !data.description || !data.price || !data.address) {
-        return {'message': 'Property not found', status: 404, data: null}
+        throw new HttpException('data is mandatory.', HttpStatus.BAD_REQUEST);
     }
 
+    if(ownerId !== id){
+      throw new HttpException('You not authorization for update this property', HttpStatus.UNAUTHORIZED)
+    }
 
     const propertyEntity = new PropertyEntity(
       id,

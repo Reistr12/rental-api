@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from 'src/domain/repositories/iuser.repository';
 import { UserEntity } from 'src/domain/entities/user.entity';
 import { CreateUserDto } from 'src/application/dtos/user/create-user.dto';
@@ -17,7 +17,7 @@ export class CreateUserUseCase {
 
     const userAlreadyExists = await this.userRepository.findByEmail(email);
     if (userAlreadyExists) {
-      throw new Error('Já existe um usuário com esse email.');
+      throw new HttpException('this email is unavailable.', HttpStatus.BAD_REQUEST);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);  
