@@ -9,7 +9,7 @@ export class ShowPropertyByIdUseCase {
 
     async execute(id: string): Promise<any> {
         const property = await this.propertyRepository.findById(id);
-        if (!property) {
+        if (property === null) {
             throw new HttpException('Property not found', HttpStatus.NOT_FOUND)
         }
         return property;

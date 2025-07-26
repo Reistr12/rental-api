@@ -9,15 +9,18 @@ export class DeletePropertyUseCase {
   async execute(ownerId: string, propertyId: string): Promise<void> {
     const property = await this.PropetyRepository.findById(propertyId);
   
-    if (!property) {
+    if (property === null) {
       throw new HttpException('Property not found', HttpStatus.NOT_FOUND)
     }  
 
     if (property.ownerId !== ownerId) {
-      throw new HttpException('You not have permission to delete this property.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('You not have permission for delete this property.', HttpStatus.UNAUTHORIZED);
     }
 
-    return await this.PropetyRepository.delete(propertyId);
+    const deleted = await this.PropetyRepository.delete(propertyId);
+    if(deleted === null) {
+      throw new HttpException('Property not found', HttpStatus.NOT_FOUND)
+    }
   }
 
 }

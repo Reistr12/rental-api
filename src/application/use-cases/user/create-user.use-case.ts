@@ -16,7 +16,7 @@ export class CreateUserUseCase {
     const { name, email, password, role } = input;
 
     const userAlreadyExists = await this.userRepository.findByEmail(email);
-    if (userAlreadyExists) {
+    if (userAlreadyExists !== null) {
       throw new HttpException('this email is unavailable.', HttpStatus.BAD_REQUEST);
     }
 

@@ -10,8 +10,8 @@ export class DeleteUserUseCase {
     async execute(email: string, userInfo: any): Promise<any> {
      const userAlreadyExists = await this.userRepository.findByEmail(email);
 
-     if (!userAlreadyExists) {
-       throw new HttpException('Not exists user with this email', HttpStatus.NOT_FOUND)
+     if (userAlreadyExists === null) {
+       throw new HttpException('User not found', HttpStatus.NOT_FOUND)
      }
 
       if(userAlreadyExists.id == userInfo.sub){

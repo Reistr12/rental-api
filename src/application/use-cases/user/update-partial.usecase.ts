@@ -13,7 +13,7 @@ export class UpdatePartialUserUseCase {
   async execute(input: any, userInfo: any, id: string): Promise<any> {
     const user = await this.userRepository.findById(id);
 
-    if (!user) {
+    if (user === null) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND)
     }
     
@@ -21,13 +21,13 @@ export class UpdatePartialUserUseCase {
       throw new HttpException('You not authorization for update this user', HttpStatus.UNAUTHORIZED)
     }
     const updatedUser = new UserEntity(
-      user.id,
+      userInfo.sub,
       input.name ?? user.name,
       input.email ?? user.email,
       input.password ?? user.password,
       input.role ?? user.role
     );
     
-    return await this.userRepository.updatePartial(updatedUser);
+    return await this.userRepository.updatePartial(updatedUser, id);
   }
 }   

@@ -16,7 +16,12 @@ export class UpdatePropertyUseCase {
         throw new HttpException('data is mandatory.', HttpStatus.BAD_REQUEST);
     }
 
-    if(ownerId !== id){
+    const propertyOwnerId = await this.propertyRepository.findById(id)
+    if (propertyOwnerId === null) {
+       throw new HttpException('NOT Found', HttpStatus.NOT_FOUND)
+    }
+    
+    if(ownerId !== propertyOwnerId?.ownerId){
       throw new HttpException('You not authorization for update this property', HttpStatus.UNAUTHORIZED)
     }
 
@@ -29,6 +34,8 @@ export class UpdatePropertyUseCase {
       ownerId,
     )
 
-    return await this.propertyRepository.update(propertyEntity)
+    const update = this.propertyRepository.update(propertyEntity, id)
+    if(update === null)  throw new HttpException('Property not found', HttpStatus.NOT_FOUND)
+      return update;
   }
 }

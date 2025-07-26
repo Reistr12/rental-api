@@ -20,17 +20,16 @@ export class UserRepository implements IUserRepository{
 
   async findById(id: string): Promise<any | any> {
     const user = await this.userModel.findOne({ where: { id } });
-    if (!user) throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+    if (!user) return null
     const { password, ...userWithoutPassword } = user.get({ plain: true });
     return userWithoutPassword;
 }   
 
   async findByEmail(email: string): Promise<any | null> {
-   const user = await this.userModel.findOne({ where: { email } });
-   if (!user) return null;
-
-  const { password, ...userWithoutPassword } = user.get({ plain: true });
-  return userWithoutPassword; 
+    const user = await this.userModel.findOne({ where: { email } });
+    if(!user) return null
+    const { password, ...userWithoutPassword } = user.get({ plain: true });
+    return userWithoutPassword; 
   }
 
   // Método para encontrar usuário por email, incluindo a senha
@@ -44,8 +43,8 @@ export class UserRepository implements IUserRepository{
   }
 
 
-  async update(user: UserEntity): Promise<any> {
-    const existingUser = await this.userModel.findByPk(user.id);
+  async update(user: UserEntity, id: string): Promise<any> {
+    const existingUser = await this.userModel.findByPk(id);
     if (existingUser) {
       await existingUser.update({
         name: user.name,
@@ -53,50 +52,32 @@ export class UserRepository implements IUserRepository{
         password: user.password,
         role: user.role,
       });
+      return existingUser;
     } else {
-      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+      return null
     }
-    return new UserEntity(
-      user.id,
-      user.name,
-      user.email,
-      user.password,
-      user.role,
-      user.createdAt ?? new Date(),
-    )
+    
   }
 
-  async updatePartial(data: Partial<UserEntity>): Promise<any> {
-    const user = await this.userModel.findByPk(data.id);
+  async updatePartial(data: Partial<UserEntity>, id: string): Promise<any> {
+    const user = await this.userModel.findByPk(id);
 
-    if (!user) {
-      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
-    }
+    if (!user) return null
 
     await user.update(data);
 
-    //Linhas adicionadas para retornar o atualizar o user depois da mudança
-    //Isso é opcional, dependendo de como você deseja manipular o retorno
-    const updatedUser = await this.userModel.findByPk(data.id);
-    if (!updatedUser) {
-      throw new HttpException('Error.', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    const plainUser = updatedUser.get({ plain: true });
-
     return {
-      id: plainUser.id,
-      name: plainUser.name,
-      email: plainUser.email,
-      role: plainUser.role,
-      createdAt: plainUser.createdAt,
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
     };
   }
 
   async delete(email: string): Promise<any> {
     const deleted = await User.destroy({ where: { email } });
-    if (deleted === 0) { 
-       throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
-    }
+    if (deleted === 0) return null
     return { message: 'User deleted successfully' };
   }
 }

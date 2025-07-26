@@ -15,11 +15,9 @@ export class PropertyRepository implements IPropertyRepository {
     return await this.propertyModel.create(property as any);
   }
 
-  async findById(id: string): Promise<PropertyEntity> {
+  async findById(id: string): Promise<PropertyEntity | null> {
     const property = await this.propertyModel.findByPk(id);
-    if (!property) {
-      throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
-    }
+    if (!property) return null
 
 
   return new PropertyEntity(
@@ -51,16 +49,14 @@ export class PropertyRepository implements IPropertyRepository {
   }
 
 
-  async findByOwnerId(ownerId: string): Promise<PropertyEntity[]> {
+  async findByOwnerId(ownerId: string): Promise<PropertyEntity[] | null> {
     const properties = await this.propertyModel.findAll({ where: { ownerId } });
-    if (!properties || properties.length === 0) {
-      throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
-    }
+    if (!properties || properties.length === 0) return null
     return properties; 
   }
   
-  async update(property: PropertyEntity): Promise<any> {
-    const existingProperty = await PropertyModel.findByPk(property.id);
+  async update(property: PropertyEntity, id: string): Promise<any> {
+    const existingProperty = await PropertyModel.findByPk(id);
 
     if (existingProperty) {
       await existingProperty.update({
@@ -70,7 +66,7 @@ export class PropertyRepository implements IPropertyRepository {
         price: property.price,
       });
     } else {
-      throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
+      return null
     }
     return new PropertyEntity(
       property.id ?? existingProperty.id,
@@ -84,10 +80,7 @@ export class PropertyRepository implements IPropertyRepository {
 
   async delete(id: string): Promise<any> {
       const deleted = await PropertyModel.destroy({ where: { id } });
-      if (deleted === 0) {
-        
-         throw new HttpException('Property not found.', HttpStatus.NOT_FOUND);
-      }
+      if (deleted === 0) return null;
       return { message: 'User deleted successfully' };
     }
 }

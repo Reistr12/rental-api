@@ -1,8 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { UpdatePartialDto } from "src/application/dtos/user/update-partial.dto";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { IUserRepository } from "src/domain/repositories/iuser.repository";
-import { UserRepository } from "src/infra/repositories/sequelize/user.repository";
 
 
 
@@ -13,24 +11,30 @@ export class UpdateUserUseCase {
     private readonly IuserRepository: IUserRepository,
   ) {}
 
-   async execute(input, userInfo, id): Promise<void> {
-    const user = await this.IuserRepository.findById(id);
+   async execute(input, userInfo, id: string): Promise<void> {
+    const { name, email, password, role } = input;
+    const user = await this.IuserRepository.findById(userInfo.sub);
 
-    if (!user) {
-      throw new Error('User not found.');
+    if (user === null) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
     }
 
-    if(userInfo.sub !== user.id){
+    if(userInfo.sub !== id){
       throw new HttpException('You not authorization for update this user', HttpStatus.UNAUTHORIZED)
     }
 
+   const userAlreadyExists = await this.IuserRepository.findByEmail(email);
+
+    if (userAlreadyExists !== null) {
+      throw new HttpException('this email is unavailable.', HttpStatus.BAD_REQUEST);
+    }
     const updatedUser = new UserEntity(
       user.id,
-      input.name ?? user.name,
-      input.email ?? user.email,
-      input.password ?? user.password,
-      input.role ?? user.role
+      name ?? user.name,
+      email ?? user.email,
+      password ?? user.password,
+      role ?? user.role
     );
-    return await this.IuserRepository.update(updatedUser);
+    return await this.IuserRepository.update(updatedUser, id);
   }
 }

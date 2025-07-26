@@ -11,7 +11,7 @@ export class ShowUserByIdUseCase {
 
   async execute(userId: string): Promise<UserEntity> {
     const user = await this.userRepository.findById(userId);
-    if (!user) {
+    if (user === null) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND)
     }
 

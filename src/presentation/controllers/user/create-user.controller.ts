@@ -8,7 +8,6 @@ import { UserEntity } from 'src/domain/entities/user.entity';
 export class CreateUserController {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
-  @UseGuards(AuthGuard)
   @Post('create')
   async createUser(@Body() data: CreateUserDto): Promise<UserEntity> {
       const user = await this.createUserUseCase.execute(data);

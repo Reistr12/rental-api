@@ -7,9 +7,9 @@ export abstract class IPropertyRepository {
 
   abstract findAll(): Promise<PropertyEntity[]>;
 
-  abstract findByOwnerId(ownerId: string): Promise<PropertyEntity[]>;
+  abstract findByOwnerId(ownerId: string): Promise<PropertyEntity[] | null>;
 
-  abstract update(property: PropertyEntity): Promise<void>;
+  abstract update(property: PropertyEntity, id: string): Promise<void>;
 
   abstract delete(id: string): Promise<void>;
 }
