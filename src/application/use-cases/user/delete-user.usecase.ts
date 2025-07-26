@@ -20,4 +20,4 @@ export class DeleteUserUseCase {
       throw new HttpException('You not have authorization for delete this user', HttpStatus.UNAUTHORIZED)
       }      
   }
-}   
+} 
