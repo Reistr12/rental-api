@@ -6,7 +6,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
 
 
-@Controller('property')
+@Controller('properties')
 export class CreatePropertyController {
     constructor(
         private readonly createPropertyUseCase: CreatePropertyUseCase, 

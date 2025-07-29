@@ -3,7 +3,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ListPropertiesUseCase } from 'src/application/use-cases/property/list-properties.usecase';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('property')
+@Controller('properties')
 export class ListPropertiesController {
   constructor(private readonly listPropertiesUseCase: ListPropertiesUseCase) {}
   

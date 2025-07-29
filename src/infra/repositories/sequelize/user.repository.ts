@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/sequelize';
-import { error } from "console";
 import { UserEntity } from "src/domain/entities/user.entity";
 import { IUserRepository } from "src/domain/repositories/iuser.repository";
 import { User } from 'src/infra/database/models/user.model';

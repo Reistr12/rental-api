@@ -1,58 +1,55 @@
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('rental_contracts', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
       },
-      propertyId: {
+      property_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        field: 'property_id',
       },
-      tenantId: {
+      tenant_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        field: 'tenant_id',
       },
-      startDate: {
+      start_date: {
         type: Sequelize.DATE,
         allowNull: false,
-        field: 'start_date',
       },
-      endDate: {
+      end_date: {
         type: Sequelize.DATE,
         allowNull: false,
-        field: 'end_date',
       },
-      monthlyValue: {
+      monthly_value: {
         type: Sequelize.FLOAT,
         allowNull: false,
-        field: 'monthly_value',
       },
-      isActive: {
+      is_active: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
         defaultValue: true,
-        field: 'is_active',
       },
-      createdAt: {
+      status: {
+        type: Sequelize.ENUM('PENDING', 'APPROVED', 'REJECTED'),
+        defaultValue: 'PENDING',
+      },
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        field: 'created_at',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        field: 'updated_at',
-      }
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
     });
   },
 
-  async down(queryInterface) {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('rental_contracts');
-  }
+  },
 };

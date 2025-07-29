@@ -2,7 +2,7 @@ import { Controller, Get, Param, ParseUUIDPipe, UseGuards } from "@nestjs/common
 import { ShowPropertyByIdUseCase } from "src/application/use-cases/property/show-property-by-id.usecase";
 import { AuthGuard } from "src/auth/auth.guard";
 
-@Controller('property')
+@Controller('properties')
 export class ShowPropertyByIdController {
     constructor(
         private readonly showPropertyByIdUseCase: ShowPropertyByIdUseCase, 

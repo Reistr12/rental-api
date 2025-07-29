@@ -5,7 +5,7 @@ import { DeleteUserUseCase } from "src/application/use-cases/user/delete-user.us
 import { AuthGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
 
-@Controller('property')
+@Controller('properties')
 export class DeletePropertyController {
   constructor(
     private readonly deletePropertyUseCase: DeletePropertyUseCase,

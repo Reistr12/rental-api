@@ -5,7 +5,7 @@ import { UpdatePropertyUseCase } from "src/application/use-cases/property/update
 import { AuthGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
 
-@Controller('property')
+@Controller('properties')
 export class UpdatePropertyController {
   constructor(
     private readonly updatePropertyUseCase: UpdatePropertyUseCase
