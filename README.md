@@ -70,7 +70,7 @@ PATCH /contracts/:id/reject – Atualiza o status do contrato para NEGADO
 ## 💻 Como rodar localmente
 
 1. Clone o repositório:  
-git clone https://github.com/seu-usuario/rental-api.git && cd rental-api/api  
+git clone https://github.com/Reistr12/rental-api.git && cd rental-api/api  
 
 2. Instale as dependências:  
 npm install  
