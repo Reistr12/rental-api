@@ -1,98 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🏡 Rental API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful para gerenciamento de aluguéis de imóveis. Desenvolvida em **NestJS** com **Sequelize**, **PostgreSQL**, e estruturada com princípios de **DDD (Domain-Driven Design)**, **Clean Architecture** e **SOLID**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Objetivo
 
-## Description
+O objetivo deste projeto é criar uma API robusta e escalável para plataformas de locação de imóveis, permitindo o gerenciamento de contratos, inquilinos e propriedades, com autenticação JWT e divisão clara entre camadas da aplicação.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🧰 Tecnologias utilizadas
 
-## Project setup
+- Node.js  
+- NestJS  
+- PostgreSQL  
+- Sequelize ORM  
+- JWT (autenticação)  
+- Class-validator / class-transformer  
+- Arquitetura limpa (Clean Architecture)  
+- DDD (Domain-Driven Design)  
+- Princípios SOLID  
 
-```bash
-$ npm install
-```
+## 📁 Estrutura do Projeto
 
-## Compile and run the project
+src  
+├── auth                      # Módulo de autenticação (JWT)  
+├── application               # Casos de uso  
+│   └── use-cases  
+├── domain                    # Entidades e interfaces  
+├── infra                     # Repositórios e Models Sequelize  
+│   └── repositories  
+├── presentation              # Controllers e DTOs  
+└── main.ts                   # Inicialização da aplicação  
 
-```bash
-# development
-$ npm run start
+## ✅ Funcionalidades
 
-# watch mode
-$ npm run start:dev
+- Cadastro de propriedades  
+- Cadastro de inquilinos  
+- Criação de contratos de aluguel  
+- Atualização de status do contrato (APROVADO | NEGADO)  
+- Autenticação com JWT  
+- Aplicação dos princípios de Clean Architecture e DDD  
 
-# production mode
-$ npm run start:prod
-```
+## 🔐 Autenticação
 
-## Run tests
+A API utiliza autenticação JWT. Para acessar rotas protegidas, adicione o token no header:  
 
-```bash
-# unit tests
-$ npm run test
+Authorization: Bearer <token>
 
-# e2e tests
-$ npm run test:e2e
+## 🧪 Endpoints disponíveis
 
-# test coverage
-$ npm run test:cov
-```
+### Auth
 
-## Deployment
+POST /auth/login – Autentica e retorna token JWT  
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Propriedades
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+GET /properties – Lista todas as propriedades  
+POST /properties – Cria uma nova propriedade  
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### Inquilinos
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+GET /tenants – Lista todos os inquilinos  
+POST /tenants – Cria um novo inquilino  
 
-## Resources
+### Contratos de Aluguel
 
-Check out a few resources that may come in handy when working with NestJS:
+POST /contracts – Cria um novo contrato de aluguel  
+PATCH /contracts/:id/approve – Atualiza o status do contrato para APROVADO  
+PATCH /contracts/:id/reject – Atualiza o status do contrato para NEGADO  
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 💻 Como rodar localmente
 
-## Support
+1. Clone o repositório:  
+git clone https://github.com/seu-usuario/rental-api.git && cd rental-api/api  
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+2. Instale as dependências:  
+npm install  
 
-## Stay in touch
+3. Configure o arquivo `.env`:  
+DB_HOST=localhost  
+DB_PORT=5432  
+DB_NAME=rental_db  
+DB_USER=postgres  
+DB_PASS=sua_senha  
+JWT_SECRET=sua_chave_secreta  
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+4. Rode as migrations (se necessário):  
+npx sequelize-cli db:migrate  
 
-## License
+5. Inicie o servidor:  
+npm run start:dev  
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 📌 Boas práticas aplicadas
+
+- Separação de camadas: domain, application, infra e presentation  
+- DTOs com validações usando `class-validator`  
+- Uso de interfaces para dependências (inversão de controle)  
+- Repositórios desacoplados da camada de domínio  
+- Casos de uso orquestram a lógica de negócio  
+
+
+## 👨‍💻 Autor
+
+Gabriel Reis  
+LinkedIn:https://www.linkedin.com/in/gabriel-reis-13a035350/ https://www.linkedin.com/in/gabrielreisdev  
+GitHub: https://github.com/Reistr12  
+
+---
+
+Este projeto faz parte do meu portfólio pessoal como desenvolvedor backend. Fique à vontade para dar feedback ou sugestões!
