@@ -12,9 +12,4 @@ export class AuthController {
     return await this.authService.validateUser(body.email, body.password);
   }
 
-  @Get('me')
-  @UseGuards(AuthGuard)
-  getMe(@CurrentUser() user: any) {
-    return user;
-  }
 }
